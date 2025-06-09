@@ -21,7 +21,7 @@ build() {
   echo "\033[1mbuilding binary for release ${RELEASE}. OS: ${os}. Arch: ${arch}...\033[0m"
   
   GOOS=${os} GOARCH=${arch} go build -o bin/${release}/tfplan
-  tar -czvf bin/${release}/tfplan_${release}_${os}_${arch}.tar.gz bin/${release}/tfplan
+  tar -czvf bin/${release}/tfplan_${release}_${os}_${arch}.tar.gz -C bin/${release} tfplan
   rm bin/${release}/tfplan
 }
 
@@ -50,7 +50,7 @@ checkout() {
 
 execute() {
   getBranch
-  checkout $RELEASE
+  # checkout $RELEASE
   test
   build darwin amd64 ${RELEASE}
   build darwin arm64 ${RELEASE}
@@ -59,7 +59,7 @@ execute() {
   build windows amd64 ${RELEASE}
   build windows arm64 ${RELEASE}
   checksums ${RELEASE}
-  checkout $CURRENT
+  # checkout $CURRENT
 }
 
 while getopts "r:" opt
