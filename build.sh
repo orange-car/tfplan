@@ -45,6 +45,7 @@ checkout() {
 }
 
 execute() {
+  getBranch
   echo "\033[1mcheckout out git tag ${RELEASE}...\033[0m"
   checkout $RELEASE
   echo ""
