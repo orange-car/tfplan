@@ -36,6 +36,10 @@ checksums() {
 done
 }
 
+getBranch() {
+  CURRENT=$(git rev-parse --abbrev-ref HEAD)
+}
+
 checkout() {
   git checkout $1
 }
@@ -58,6 +62,7 @@ execute() {
   echo ""
   echo "\033[1mbuilding checksums...\033[0m"
   checksums ${RELEASE}
+  checkout $CURRENT
 }
 
 while getopts "r:" opt
