@@ -8,8 +8,19 @@ The `tfplan` CLI is a toolbox allowing you to parse Terraform plans and perform 
 tfplan is currently in version 0 (unstable). Please keep this in mind and assess the risk when using the tool in critical applications. Until tfplan is released for v1, there are no stability guarantees and significant changes are expected.
 
 ## Installation
-Use `go install -v github.com/orange-car/tfplan@v0.0.1` 
-Ensure your go bin dir is in your path with `export PATH=$PATH:$HOME/go/bin`
+Make sure you change the v0.0.2 release number as appropriate. The below are just examples.
+
+### Go Install
+1. `go install -v github.com/orange-car/tfplan@v0.0.2` 
+2. Ensure your go bin dir is in your path with `export PATH=$PATH:$HOME/go/bin`
+
+### Script install
+1. `curl https://raw.githubusercontent.com/orange-car/tfplan/master/install.sh > install.sh`
+2. `./install.sh -d -r v0.0.2`
+
+By default, this will install the tfplan binary at /usr/local/bin/tfplan. To change this, use the -b flag and specify your own directory.
+
+Note - currently you must pass a release to the install script as tfplan is in pre-release. Once generally available, you will be able to install the "latest" release.
 
 ## Usage
 
