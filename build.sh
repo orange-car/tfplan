@@ -34,7 +34,7 @@ checksums() {
   for file in bin/${release}/*; do 
   echo "$file"
     if [[ $file == *.tar.gz ]]; then 
-        md5sum ${file} >> bin/${release}/tfplan_${release}_checksums.txt
+        sha256sum ${file} >> bin/${release}/tfplan_${release}_checksums.txt
     fi 
 done
 }
