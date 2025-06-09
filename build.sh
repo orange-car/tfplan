@@ -10,6 +10,7 @@ helpFunction()
 }
 
 test() {
+  echo "\033[1mtesting...\033[0m"
   go test ./... -v --race --cover
 }
 
@@ -17,6 +18,7 @@ build() {
   os=$1
   arch=$2
   release=$3
+  echo "\033[1mbuilding binaries for release ${RELEASE}...\033[0m"
   
   GOOS=${os} GOARCH=${arch} go build -o bin/${release}/tfplan_${release}_${os}_${arch}
   tar -czvf bin/${release}/tfplan_${release}_${os}_${arch}.tar.gz bin/${release}/tfplan_${release}_${os}_${arch}
@@ -25,6 +27,7 @@ build() {
 
 checksums() {
   release=$1
+  echo "\033[1mbuilding checksums...\033[0m"
   rm -f ./bin/${release}/tfplan_${release}_checksums.txt
   touch ./bin/${release}/tfplan_${release}_checksums.txt
 
@@ -41,27 +44,20 @@ getBranch() {
 }
 
 checkout() {
+  echo "\033[1mchecking out git tag ${RELEASE}...\033[0m"
   git checkout $1
 }
 
 execute() {
   getBranch
-  echo "\033[1mcheckout out git tag ${RELEASE}...\033[0m"
   checkout $RELEASE
-  echo ""
-  echo "\033[1mtesting...\033[0m"
-  echo ""
   test
-  echo ""
-  echo "\033[1mbuilding binaries for release ${RELEASE}...\033[0m"
   build darwin amd64 ${RELEASE}
   build darwin arm64 ${RELEASE}
   build linux amd64 ${RELEASE}
   build linux arm64 ${RELEASE}
   build windows amd64 ${RELEASE}
   build windows arm64 ${RELEASE}
-  echo ""
-  echo "\033[1mbuilding checksums...\033[0m"
   checksums ${RELEASE}
   checkout $CURRENT
 }
