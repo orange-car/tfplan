@@ -21,7 +21,7 @@ build() {
   echo "\033[1mbuilding binary for release ${RELEASE}. OS: ${os}. Arch: ${arch}...\033[0m"
   
   GOOS=${os} GOARCH=${arch} go build -o bin/${release}/tfplan
-  tar -czvf bin/${release}/tfplan.tar.gz bin/${release}/tfplan_${release}_${os}_${arch}
+  tar -czvf bin/${release}/tfplan_${release}_${os}_${arch}.tar.gz bin/${release}/tfplan
   rm bin/${release}/tfplan
 }
 
