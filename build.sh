@@ -36,12 +36,17 @@ checksums() {
 done
 }
 
+checkout() {
+  git checkout $1
+}
+
 execute() {
+  echo "\033[1mcheckout out git tag ${RELEASE}...\033[0m"
+  checkout $RELEASE
+  echo ""
   echo "\033[1mtesting...\033[0m"
   echo ""
-
   test
-
   echo ""
   echo "\033[1mbuilding binaries for release ${RELEASE}...\033[0m"
   build darwin amd64 ${RELEASE}
@@ -50,7 +55,6 @@ execute() {
   build linux arm64 ${RELEASE}
   build windows amd64 ${RELEASE}
   build windows arm64 ${RELEASE}
-
   echo ""
   echo "\033[1mbuilding checksums...\033[0m"
   checksums ${RELEASE}
