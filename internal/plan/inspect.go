@@ -202,6 +202,13 @@ func parseChange(chng *tfJson.Change) EntityDiff {
 }
 
 /*
+Checks if an EntityDiff is empty
+*/
+func (e *EntityDiff) IsEmpty() bool {
+	return len(*e) == 0
+}
+
+/*
 Checks if a InspectOutput is empty
 */
 func (i *InspectOutput) IsEmpty() bool {
@@ -307,21 +314,28 @@ func (p *Plan) Inspect(params *InspectInput) (*InspectOutput, error) {
 
 	go func() {
 		for _, rChange := range p.ResourceChanges {
-			out.Diff.Resources[rChange.Address] = parseChange(rChange.Change)
+			if chng := parseChange(rChange.Change); !chng.IsEmpty() {
+				out.Diff.Resources[rChange.Address] = chng
+			}
 		}
 		wg.Done()
 	}()
 
 	go func() {
 		for _, dChange := range p.ResourceDrift {
-			out.Diff.ResourceDrifts[dChange.Address] = parseChange(dChange.Change)
+			if chng := parseChange(dChange.Change); !chng.IsEmpty() {
+				out.Diff.ResourceDrifts[dChange.Address] = chng
+			}
 		}
 		wg.Done()
 	}()
 
 	go func() {
 		for name, oChange := range p.OutputChanges {
-			out.Diff.Outputs[name] = parseChange(oChange)
+			if chng := parseChange(oChange); !chng.IsEmpty() {
+				out.Diff.Outputs[name] = chng
+			}
+
 		}
 		wg.Done()
 	}()
