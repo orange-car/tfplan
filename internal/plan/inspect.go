@@ -314,6 +314,9 @@ func (p *Plan) Inspect(params *InspectInput) (*InspectOutput, error) {
 
 	go func() {
 		for _, rChange := range p.ResourceChanges {
+			if strings.HasPrefix(rChange.Address, "data.") {
+				continue
+			}
 			if chng := parseChange(rChange.Change); !chng.IsEmpty() {
 				out.Diff.Resources[rChange.Address] = chng
 			}
@@ -323,6 +326,9 @@ func (p *Plan) Inspect(params *InspectInput) (*InspectOutput, error) {
 
 	go func() {
 		for _, dChange := range p.ResourceDrift {
+			if strings.HasPrefix(dChange.Address, "data.") {
+				continue
+			}
 			if chng := parseChange(dChange.Change); !chng.IsEmpty() {
 				out.Diff.ResourceDrifts[dChange.Address] = chng
 			}

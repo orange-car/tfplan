@@ -91,6 +91,9 @@ The following replacements will be used for before or after values of these kind
 - Sensitive = (sensitive value)
 - unknown = (known after apply)
 
+#### Data Blocks
+Data blocks are not evaluated for change in inspect or compare operations.
+
 #### Reading the output
 To filter the parsed JSON Terraform plan and work around objects of any type, tfplan will flatten object attributes (resource arguments) into a single "." separated paths with before and after values. For example, the "name" attribute for the resource aws_cloudwatch_log_group would be represented as ".name" and this is what your filter criteria needs to account for. 
 
