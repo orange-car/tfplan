@@ -148,16 +148,22 @@ func parseChange(chng *tfJson.Change) EntityDiff {
 
 	// Must do unknowns before sensitives. Desired behaviour is
 	// sensitives that are also unknown are marked as sensitive.
-	for k := range afterUnknowns {
-		after[k] = "(known after apply)"
+	for k, b := range afterUnknowns {
+		if b == "true" {
+			after[k] = "(known after apply)"
+		}
 	}
 
-	for k := range beforeSensitives {
-		before[k] = "(sensitive value)"
+	for k, b := range beforeSensitives {
+		if b == "true" {
+			before[k] = "(sensitive value)"
+		}
 	}
 
-	for k := range afterSensitives {
-		after[k] = "(sensitive value)"
+	for k, b := range afterSensitives {
+		if b == "true" {
+			after[k] = "(sensitive value)"
+		}
 	}
 
 	for path, beforeVal := range before {
