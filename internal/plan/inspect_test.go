@@ -452,6 +452,47 @@ func Test_InspectWithoutWildcard(t *testing.T) {
 			},
 			expectedError: nil,
 		},
+		"no filter no changes": {
+			plan: &Plan{
+				ResourceChanges: []*tfJson.ResourceChange{
+					{
+						Address:      "aws_cloudwatch_log_group.this",
+						Mode:         "managed",
+						Type:         "aws_cloudwatch_log_group",
+						Name:         "this",
+						ProviderName: "registry.terraform.io/hashicorp/aws",
+						Change: &tfJson.Change{
+							Before: map[string]any{
+								"name": "foo-123",
+							},
+							After: map[string]any{
+								"name": "foo-123",
+							},
+							AfterUnknown: map[string]any{
+								"name": false,
+							},
+							BeforeSensitive: map[string]any{
+								"name": false,
+							},
+							AfterSensitive: map[string]any{
+								"name": false,
+							},
+						},
+					},
+				},
+			},
+			input: &InspectInput{
+				Filter: &InspectFilter{},
+			},
+			expectedOutput: &InspectOutput{
+				Diff: &InspectDiff{
+					Resources:      map[string]EntityDiff{},
+					ResourceDrifts: map[string]EntityDiff{},
+					Outputs:        map[string]EntityDiff{},
+				},
+			},
+			expectedError: nil,
+		},
 	}
 
 	for name, tst := range cases {
