@@ -148,16 +148,22 @@ func parseChange(chng *tfJson.Change) EntityDiff {
 
 	// Must do unknowns before sensitives. Desired behaviour is
 	// sensitives that are also unknown are marked as sensitive.
-	for k := range afterUnknowns {
-		after[k] = "(known after apply)"
+	for k, b := range afterUnknowns {
+		if b == "true" {
+			after[k] = "(known after apply)"
+		}
 	}
 
-	for k := range beforeSensitives {
-		before[k] = "(sensitive value)"
+	for k, b := range beforeSensitives {
+		if b == "true" {
+			before[k] = "(sensitive value)"
+		}
 	}
 
-	for k := range afterSensitives {
-		after[k] = "(sensitive value)"
+	for k, b := range afterSensitives {
+		if b == "true" {
+			after[k] = "(sensitive value)"
+		}
 	}
 
 	for path, beforeVal := range before {
@@ -193,6 +199,13 @@ func parseChange(chng *tfJson.Change) EntityDiff {
 	}
 
 	return out
+}
+
+/*
+Checks if an EntityDiff is empty
+*/
+func (e *EntityDiff) IsEmpty() bool {
+	return len(*e) == 0
 }
 
 /*
@@ -301,21 +314,34 @@ func (p *Plan) Inspect(params *InspectInput) (*InspectOutput, error) {
 
 	go func() {
 		for _, rChange := range p.ResourceChanges {
-			out.Diff.Resources[rChange.Address] = parseChange(rChange.Change)
+			if strings.HasPrefix(rChange.Address, "data.") {
+				continue
+			}
+			if chng := parseChange(rChange.Change); !chng.IsEmpty() {
+				out.Diff.Resources[rChange.Address] = chng
+			}
 		}
 		wg.Done()
 	}()
 
 	go func() {
 		for _, dChange := range p.ResourceDrift {
-			out.Diff.ResourceDrifts[dChange.Address] = parseChange(dChange.Change)
+			if strings.HasPrefix(dChange.Address, "data.") {
+				continue
+			}
+			if chng := parseChange(dChange.Change); !chng.IsEmpty() {
+				out.Diff.ResourceDrifts[dChange.Address] = chng
+			}
 		}
 		wg.Done()
 	}()
 
 	go func() {
 		for name, oChange := range p.OutputChanges {
-			out.Diff.Outputs[name] = parseChange(oChange)
+			if chng := parseChange(oChange); !chng.IsEmpty() {
+				out.Diff.Outputs[name] = chng
+			}
+
 		}
 		wg.Done()
 	}()
