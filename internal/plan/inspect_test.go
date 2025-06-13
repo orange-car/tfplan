@@ -425,9 +425,13 @@ func Test_InspectWithoutWildcard(t *testing.T) {
 							After: map[string]any{
 								"name": "foo-skfghsjfhgsjfh",
 							},
-							AfterUnknown:    false,
+							AfterUnknown: map[string]any{
+								"name": false,
+							},
 							BeforeSensitive: false,
-							AfterSensitive:  false,
+							AfterSensitive: map[string]any{
+								"name": false,
+							},
 						},
 					},
 				},
