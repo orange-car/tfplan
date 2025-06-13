@@ -16,7 +16,7 @@ Make sure you change the v0.0.2 release number as appropriate. The below are jus
 
 ### Script install
 1. `curl https://raw.githubusercontent.com/orange-car/tfplan/master/install.sh > install.sh`
-2. `./install.sh -d -r v0.0.2`
+2. `./install.sh -d v0.0.2`
 
 By default, this will install the tfplan binary at /usr/local/bin/tfplan. To change this, use the -b flag and specify your own directory.
 
